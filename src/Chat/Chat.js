@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import Peer from "peerjs";
+import { Typography } from "antd";
+import styled from "styled-components";
+
 import { RenderChat } from "../Components/RenderChat";
 import { ChatInput } from "../Components/ChatInput";
-import { ConnectionPage } from "../Components/ConnectionPage";
+import { Spinner } from "../Components/Spin";
+import WaitingToConnect from "../Components/WaitingToConnect";
+
 import {
   initializePeerMethods,
-  connect,
   sendMessgae,
 } from "../service/connectionServiceUtil";
+import { Container, Card } from "../styles/styles";
+import { media } from "../styles/media";
+const { Title } = Typography;
 
 export class Chat extends Component {
   constructor(props) {
@@ -17,6 +24,7 @@ export class Chat extends Component {
       my_id: "",
       peer_id: "",
       initialized: false,
+      connected: false,
       chat: [],
       currentText: "",
     };
@@ -66,38 +74,51 @@ export class Chat extends Component {
       currentText,
       conn,
       chat,
-      peer_id,
-      peer,
     } = this.state;
     if (!initialized) {
-      return <div>Loading...</div>;
+      return <Spinner />;
     }
     return (
-      <div>
-        <div>
-          <span>Your PeerJS ID </span>
-          <strong>{my_id}</strong>
-        </div>
-        {connected ? (
-          <>
-            <ChatInput
-              onChangeText={this.onChangeText}
-              sendMessgae={() =>
-                sendMessgae(currentText, my_id, conn, chat, this.setValue)
-              }
-              currentText={currentText}
-            />
-            <RenderChat chat={chat} />
-          </>
-        ) : (
-          <ConnectionPage
-            handleTextChange={this.handleTextChange}
-            connect={() =>
-              connect(peer_id, peer, this.setValue, this.onReceiveData)
-            }
-          />
-        )}
-      </div>
+      <ContainerStyled>
+        <CardStyled>
+          <Title level={3}>Chat WebRTC</Title>
+          <p>
+            Talking to User <b>{this.state.peer_id}</b>
+          </p>
+          {connected ? (
+            <>
+              <RenderChat chat={chat} />
+              <ChatInput
+                onChangeText={this.onChangeText}
+                sendMessgae={() =>
+                  sendMessgae(currentText, my_id, conn, chat, this.setValue)
+                }
+                currentText={currentText}
+              />
+            </>
+          ) : (
+            <WaitingToConnect />
+          )}
+        </CardStyled>
+      </ContainerStyled>
     );
   }
 }
+const ContainerStyled = styled(Container)`
+  justify-content: flex-start;
+  height: 100%;
+  width: inherit;
+`;
+
+const CardStyled = styled(Card)`
+  width: 60%;
+  height: 80%;
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  ${media.small`
+  min-width: 90%;
+  width:90%;
+            height: 90%;
+          `};
+`;
