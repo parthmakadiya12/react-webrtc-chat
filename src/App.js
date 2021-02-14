@@ -1,12 +1,7 @@
-import { Chat } from "./Components/Chat";
-import "./App.css";
+import { Chat } from "./Chat/Chat";
 
 function App() {
-  return (
-    <div className="App">
-      <Chat />
-    </div>
-  );
+  return <Chat />;
 }
 
 export default App;
