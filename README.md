@@ -73,3 +73,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 - peer js
 - antd
+
+### Notes:
+
+- To run fire command you need to have surge installed globally `npm install -g surge`
+- Then you can run `yarn fire` to deploy the app.
+- check it at [webrtc-react-chat.surge.sh](webrtc-react-chat.surge.sh)
+
+### How does it look like ?
+
+![Chat Screen](https://github.com/parthmakadiya12/react-webrtc-chat/blob/main/public/chat-screen.png)
